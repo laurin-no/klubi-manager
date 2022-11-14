@@ -14,28 +14,6 @@ class ClubRepository(val profile: JdbcProfile, val db: Database) {
   lazy val members = TableQuery[MemberTable]
 
   def getAllClubs() = {
-//    val query = for {
-//      m <- members
-//      c <- m.club
-//    } yield (c, m)
-
-//    def handler(mainTuples: Seq[(ClubRow, MemberRow)]) = {
-//      mainTuples.groupBy { case (clubRow, _) => clubRow }.map {
-//        case (clubRow, tuples) =>
-//          val memberRows = tuples.map { case (_, memberRow) =>
-//            memberRow
-//          }.distinct
-//          Club(
-//            clubRow.id,
-//            clubRow.name,
-//            memberRows.map(m => Member(m.id, m.name, m.clubId)),
-//            clubRow.abbreviation
-//          )
-//      }
-//    }
-
-//    query.map((c, m) => )
-
     db.stream(clubs.result)
   }
 
@@ -48,10 +26,6 @@ class ClubRepository(val profile: JdbcProfile, val db: Database) {
     val action = clubs.insertOrUpdate(row)
     db.run(action)
   }
-
-//  def getAllUsers() = {
-//    db.stream(members.result)
-//  }
 
   def insertOrUpdateMember(row: MemberRow) = {
     val action = members.insertOrUpdate(row)
