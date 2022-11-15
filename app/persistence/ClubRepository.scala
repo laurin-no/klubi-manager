@@ -13,7 +13,7 @@ class ClubRepository(val profile: JdbcProfile, val db: Database) {
   private lazy val clubs = TableQuery[ClubTable]
   private lazy val members = TableQuery[MemberTable]
 
-  def getAllClubs(): DatabasePublisher[ClubRow] = {
+  def getAllClubs: DatabasePublisher[ClubRow] = {
     db.stream(clubs.result)
   }
 
@@ -22,13 +22,13 @@ class ClubRepository(val profile: JdbcProfile, val db: Database) {
     db.run(query.result)
   }
 
-  def insertOrUpdateClub(row: ClubRow) = {
+  def insertOrUpdateClub(row: ClubRow): Future[Int] = {
     val action = clubs.insertOrUpdate(row)
     db.run(action)
   }
 
-  def insertOrUpdateMember(row: MemberRow) = {
-    val action = members.insertOrUpdate(row)
+  def insertOrUpdateMembers(rows: Seq[MemberRow]): Future[Option[Int]] = {
+    val action = members ++= rows
     db.run(action)
   }
 
@@ -39,7 +39,7 @@ class ClubRepository(val profile: JdbcProfile, val db: Database) {
     def abbreviation = column[String]("abbreviation")
 
     override def * =
-      (id, name, abbreviation) <> (ClubRow.tupled, ClubRow.unapply)
+      (id, name, abbreviation) <> ((ClubRow.apply _).tupled, ClubRow.unapply)
   }
 
   private class MemberTable(tag: Tag) extends Table[MemberRow](tag, "club") {
@@ -51,7 +51,6 @@ class ClubRepository(val profile: JdbcProfile, val db: Database) {
     def club = foreignKey("club_fk", clubId, clubs)(_.id)
 
     override def * =
-      (id, name, clubId) <> (MemberRow.tupled, MemberRow.unapply)
+      (id, name, clubId) <> ((MemberRow.apply _).tupled, MemberRow.unapply)
   }
-
 }

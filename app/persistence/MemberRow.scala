@@ -1,5 +1,7 @@
 package persistence
 
+import model.Member
+
 import java.util.UUID
 
 case class MemberRow(
@@ -7,3 +9,8 @@ case class MemberRow(
     name: String,
     clubId: UUID
 )
+
+object MemberRow {
+  def fromMember(member: Member): MemberRow =
+    MemberRow(member.id, member.name, member.clubId)
+}
