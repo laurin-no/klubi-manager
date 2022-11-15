@@ -3,4 +3,5 @@
 # ~~~~
 
 # An example route (Prefix all API routes with apiPrefix defined in application.conf)
-GET     /api/summary                controllers.HomeController.appSummary
+GET         /api/clubs        controllers.ClubController.listClubs()
+POST        /api/clubs        controllers.ClubController.createClub()

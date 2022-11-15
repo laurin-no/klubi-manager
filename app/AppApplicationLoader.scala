@@ -1,9 +1,12 @@
 import com.softwaremill.macwire._
-import controllers.HomeController
+import controllers.ClubController
+import persistence.ClubRepository
 import play.api.ApplicationLoader.Context
 import play.api.routing.Router
 import play.api.{Application, ApplicationLoader, BuiltInComponentsFromContext}
 import router.Routes
+import service.ClubService
+import slick.jdbc.JdbcBackend.Database
 
 class AppApplicationLoader extends ApplicationLoader {
 
@@ -22,6 +25,16 @@ class AppComponents(context: Context)
     wire[Routes]
   }
 
+  // database config
+  private implicit val db = Database.forConfig("h2_db")
+  private implicit val profile = slick.jdbc.H2Profile
+
+  // repositories
+  lazy val clubRepository = wire[ClubRepository]
+
+  // services
+  lazy val clubService = wire[ClubService]
+
   // controllers
-  lazy val homeController = wire[HomeController]
+  lazy val clubController = wire[ClubController]
 }
