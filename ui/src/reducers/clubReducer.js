@@ -1,5 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit'
-// import clubService from '../services/clubs'
+import clubService from '../services/clubs'
 
 const clubSlice = createSlice({
     name: 'clubs',
@@ -13,11 +13,14 @@ const clubSlice = createSlice({
 
 export const { appendClub } = clubSlice.actions
 
-// export const initializeClubs = () => {
-//   return async (dispatch) => {
-//     const clubs = await clubService.getAll()
-//     dispatch()
-//   }
-// }
+export const initializeClubs = () => {
+    return async (dispatch) => {
+        const dataHandler = (data) => {
+            dispatch(appendClub(data))
+        }
+
+        await clubService.getAll((data) => dataHandler(data))
+    }
+}
 
 export default clubSlice.reducer
