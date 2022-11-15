@@ -5,9 +5,13 @@ import slick.jdbc.JdbcBackend.Database
 import slick.jdbc.JdbcProfile
 
 import java.util.UUID
-import scala.concurrent.Future
+import scala.concurrent.{ExecutionContext, Future}
 
-class ClubRepository(val profile: JdbcProfile, val db: Database) {
+class ClubRepository(
+    val profile: JdbcProfile,
+    val db: Database,
+    implicit val ec: ExecutionContext
+) {
   import profile.api._
 
   private lazy val clubs = TableQuery[ClubTable]
@@ -32,6 +36,20 @@ class ClubRepository(val profile: JdbcProfile, val db: Database) {
     db.run(action)
   }
 
+  def createSeed(): Future[Unit] = {
+    val clubId = UUID.randomUUID()
+    val clubRow = ClubRow(clubId, "Very Strong Voimaklubi", "VSV")
+    val memberRows = MemberRow(UUID.randomUUID(), "Nice Member", clubId) ::
+      MemberRow(UUID.randomUUID(), "Another Member", clubId) :: Nil
+
+    val actions = clubs.schema.create andThen
+      (clubs += clubRow) andThen
+      members.schema.create andThen
+      (members ++= memberRows)
+
+    db.run(actions).map(_ => ())
+  }
+
   private class ClubTable(tag: Tag) extends Table[ClubRow](tag, "club") {
 
     def id = column[UUID]("id", O.PrimaryKey)
@@ -42,7 +60,7 @@ class ClubRepository(val profile: JdbcProfile, val db: Database) {
       (id, name, abbreviation) <> ((ClubRow.apply _).tupled, ClubRow.unapply)
   }
 
-  private class MemberTable(tag: Tag) extends Table[MemberRow](tag, "club") {
+  private class MemberTable(tag: Tag) extends Table[MemberRow](tag, "member") {
 
     def id = column[UUID]("id", O.PrimaryKey)
     def name = column[String]("name")

@@ -26,7 +26,7 @@ class AppComponents(context: Context)
   }
 
   // database config
-  private implicit val db = Database.forConfig("h2_db")
+  private implicit val db = Database.forConfig("db")
   private implicit val profile = slick.jdbc.H2Profile
 
   // repositories
@@ -37,4 +37,7 @@ class AppComponents(context: Context)
 
   // controllers
   lazy val clubController = wire[ClubController]
+
+  // initialize database
+  clubRepository.createSeed()
 }
