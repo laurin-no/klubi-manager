@@ -13,7 +13,7 @@ resolvers += Resolver.sonatypeRepo("snapshots")
 scalaVersion := "2.13.10"
 
 libraryDependencies ++= Seq(
-  guice,
+  "com.softwaremill.macwire" %% "macros" % "2.5.8" % "provided",
   "com.h2database" % "h2" % "2.1.214",
   "com.typesafe.slick" %% "slick" % "3.4.1",
   "org.scalatestplus.play" %% "scalatestplus-play" % "5.1.0" % Test

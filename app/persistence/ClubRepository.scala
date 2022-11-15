@@ -1,6 +1,6 @@
 package persistence
 
-import model.{Club, Member}
+import slick.basic.DatabasePublisher
 import slick.jdbc.JdbcBackend.Database
 import slick.jdbc.JdbcProfile
 
@@ -10,10 +10,10 @@ import scala.concurrent.Future
 class ClubRepository(val profile: JdbcProfile, val db: Database) {
   import profile.api._
 
-  lazy val clubs = TableQuery[ClubTable]
-  lazy val members = TableQuery[MemberTable]
+  private lazy val clubs = TableQuery[ClubTable]
+  private lazy val members = TableQuery[MemberTable]
 
-  def getAllClubs() = {
+  def getAllClubs(): DatabasePublisher[ClubRow] = {
     db.stream(clubs.result)
   }
 
@@ -32,7 +32,7 @@ class ClubRepository(val profile: JdbcProfile, val db: Database) {
     db.run(action)
   }
 
-  class ClubTable(tag: Tag) extends Table[ClubRow](tag, "club") {
+  private class ClubTable(tag: Tag) extends Table[ClubRow](tag, "club") {
 
     def id = column[UUID]("id", O.PrimaryKey)
     def name = column[String]("name")
