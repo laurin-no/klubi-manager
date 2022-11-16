@@ -6,6 +6,7 @@ import ClubList from './components/ClubList'
 import { useDispatch } from 'react-redux'
 import { initializeClubs } from './reducers/clubReducer'
 import ClubForm from './components/ClubForm'
+import Menu from './components/Menu'
 
 const App = () => {
     const dispatch = useDispatch()
@@ -16,6 +17,7 @@ const App = () => {
 
     return (
         <div>
+            <Menu />
             <h2>Klubi Manager</h2>
             <Routes>
                 <Route path="/" element={<ClubList />} />
