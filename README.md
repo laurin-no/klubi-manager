@@ -14,7 +14,7 @@ Simple web app to manage members of a club
 
 ### Frontend
 
-* Parsing of concatenated JSON...
+* Parsing of concatenated JSON... -> [possible solution](https://www.npmjs.com/package/stream-json)
 * mixing the `fetch` API and `axios` in one service feels wrong
 
 ### Tooling
