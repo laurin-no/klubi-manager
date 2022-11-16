@@ -5,6 +5,8 @@ Simple web app to manage members of a club
 
 `sbt run`
 
+frontend can be found under [http://localhost:3000/](http://localhost:3000/)
+
 ## Possible Improvements
 
 ### Backend
