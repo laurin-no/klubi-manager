@@ -23,4 +23,11 @@ export const initializeClubs = () => {
     }
 }
 
+export const createClub = (club) => {
+    return async (dispatch) => {
+        const newClub = await clubService.create(club)
+        dispatch(appendClub(newClub))
+    }
+}
+
 export default clubSlice.reducer
